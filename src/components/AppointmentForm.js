@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 
 const AppointmentForm = () => {
@@ -33,6 +35,8 @@ const AppointmentForm = () => {
         "ENT",
     ];
 
+    const navigateTo = useNavigate();
+
     const [doctors, setDoctors] = useState([]);
     useEffect(() => {
         const fetchDoctors = async() => {
@@ -52,6 +56,20 @@ const AppointmentForm = () => {
     // Handle Appointment
     const handleAppointment = async(e) => {
         e.preventDefault();
+        try {
+            const hasVisitedBool = Boolean(hasVisited);
+            const { data } = await axios.post("http://localhost:9000/api/v1/appointment/post", {
+                firstName, lastName, email, phone, uid, dob, gender, appointment_date : appointmentDate, department, doctor_firstName : doctorFirstName, doctor_lastName : doctorLastName, address, hasVisited : hasVisitedBool,
+            },{
+                withCredentials : true,
+                headers : {"Content-Type" : "application/json"}
+            })
+            toast.success(data.message);
+            navigateTo("/");
+        } 
+        catch (error) {
+            toast.error(error.response.data.message);
+        }
     };
 
   return (
@@ -161,6 +179,13 @@ const AppointmentForm = () => {
                 }
             </select>
         </div>
+
+        <textarea 
+            rows="10" 
+            value={address} 
+            onChange={(e) => setAddress(e.target.value)} 
+            placeholder='Address' 
+        />
         
         <div style={{
             gap : "10px",
@@ -168,16 +193,16 @@ const AppointmentForm = () => {
             flexDirection : "row",
           }}
         >
-          <p style={{marginBottom : 0}}>Already Registered</p>
-          <Link 
-            to={"/login"}
+          <p style={{marginBottom : 0}}>Have You Visited Before ?</p>
+          <input 
+            type='checkbox' 
+            checked={hasVisited} 
+            onChange={(e) => setHasVisited(e.target.checked)}
             style={{
-              textDecoration : "none",
-              alignItems : "center"
+                flex : "none",
+                width : "25px",
             }}
-          >
-            Login Now
-          </Link>
+          />
         </div>
 
         <div
@@ -186,7 +211,7 @@ const AppointmentForm = () => {
             alignItems : "center"
           }}
         >
-          <button type='submit'>Register</button>
+          <button type='submit'>GET APPOINTMENT</button>
         </div>
 
       </form>
