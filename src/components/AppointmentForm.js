@@ -36,15 +36,15 @@ const AppointmentForm = () => {
     const [doctors, setDoctors] = useState([]);
     useEffect(() => {
         const fetchDoctors = async() => {
-            const {data} = await axios.get(
+            const { data }= await axios.get(
                 "http://localhost:9000/api/v1/user/doctors",
                 {withCredentials : true}
             );
-            console.log(data.doctor);
+
+            // console.log(data.doctor);
 
             setDoctors(data.doctor)
         };
-
         fetchDoctors();
 
     }, []);
@@ -151,7 +151,7 @@ const AppointmentForm = () => {
             >
                 <option value="">Select Doctor</option>
                 {
-                    doctors.filter(doctor => doctor.doctorDepartment === department).map((doctor, index) => {
+                    doctors.filter((doctor) => doctor.doctorDepartment === department).map((doctor, index) => {
                         return(
                             <option value={`${doctor.firstName} ${doctor.lastName}`} key={index}>
                                 {doctor.firstName} {doctor.lastName}
