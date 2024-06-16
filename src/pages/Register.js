@@ -24,17 +24,28 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://hospital-management-system-backend-edeu.onrender.com/api/v1/user/patient/register", 
         { firstName, lastName, email, phone, uid, dob, gender, password, role : "Patient" }, 
         {
           withCredentials : true, 
           headers : {"Content-Type" : "application/json"}
         }
-      );
-      toast.success(response.data.message);
-      setIsAuthenticated(true);
-      navigateTo("/");
+      )
+      .then((res) => {
+        toast.success(res.data.message);
+        setIsAuthenticated(true);
+        navigateTo("/");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setUid("");
+        setDob("");
+        setGender("");
+        setPassword("");
+
+      })
     } 
     catch (error) {
       toast.error(error.response.data.message);
@@ -121,7 +132,7 @@ const Register = () => {
         >
           <p style={{marginBottom : 0}}>Already Registered</p>
           <Link 
-            to={"/login"}
+            to={"/signin"}
             style={{
               textDecoration : "none",
               alignItems : "center"

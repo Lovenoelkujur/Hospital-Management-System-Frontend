@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "https://hospital-management-system-backend-edeu.onrender.com/api/v1/user/login", 
         {email, password, confirmPassword, role : "Patient"}, 
         {
@@ -27,9 +27,15 @@ const Login = () => {
           headers : {"Content-Type" : "application/json"}
         }
       )
-        toast.success(response.data.message);
+      .then((res) => {
+        toast.success(res.data.message);
         setIsAuthenticated(true);
         navigateTo("/");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+
+      })
       
     } 
     catch (error) {
@@ -78,7 +84,8 @@ const Login = () => {
             to={"/register"}
             style={{
               textDecoration : "none",
-              alignItems : "center"
+              alignItems : "center",
+              color: "#271776ca"
             }}
           >
             Register Now

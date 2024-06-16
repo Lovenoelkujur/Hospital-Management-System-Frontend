@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 
 
 const AppointmentForm = () => {
@@ -35,7 +33,6 @@ const AppointmentForm = () => {
         "ENT",
     ];
 
-    const navigateTo = useNavigate();
 
     const [doctors, setDoctors] = useState([]);
     useEffect(() => {
@@ -65,7 +62,7 @@ const AppointmentForm = () => {
                 headers : {"Content-Type" : "application/json"}
             })
             toast.success(data.message);
-            navigateTo("/");
+            
         } 
         catch (error) {
             toast.error(error.response.data.message);
